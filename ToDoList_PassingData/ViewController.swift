@@ -21,8 +21,17 @@ class ViewController: UIViewController {
         
         todoListTableView.register(UINib(nibName: "TodoItemCell", bundle: nil), forCellReuseIdentifier: "TodoItemCell")
     }
-
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        guard let detailVC = segue.destination as? AddTaskController else {
+            return
+        }
+        
+        if segue.identifier == "newItem" {
+            detailVC.navigationName = "Add"
+        }
+    }
 }
 
 extension ViewController: UITableViewDelegate {
@@ -40,9 +49,16 @@ extension ViewController: UITableViewDataSource {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath) as? TodoItemCell {
             cell.ItemLabel.text = "測試"
+            cell.editButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
             return cell
         }
         return UITableViewCell()
+    }
+    
+    @objc func buttonPressed (button: UIButton) {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let addTaskVC = storyboard.instantiateViewController(withIdentifier: "detailPage")
+        self.navigationController?.pushViewController(addTaskVC, animated: true)
     }
     
 }
