@@ -11,6 +11,7 @@ import UIKit
 class AddTaskController: UIViewController {
     
     var navigationName: String!
+    var item: String?
     
     @IBOutlet weak var textView: UITextView!
     
@@ -21,15 +22,22 @@ class AddTaskController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = navigationName
+        self.textView.text = item
         setTextView()
     }
     
-    
 
-    
     @IBAction func saveTextInfo(_ sender: Any) {
-        NotificationCenter.default.post(name: .didSave, object: nil, userInfo: [NotificationInfo.message: textView.text])
+        if item == nil {
+            NotificationCenter.default.post(name: .didSave, object: nil, userInfo: [NotificationInfo.message: textView.text])
+        } else {
+             NotificationCenter.default.post(name: .didChange, object: nil, userInfo: [NotificationInfo.message: textView.text])
+        }
         navigationController?.popViewController(animated: true)
+    }
+    
+    func editInfo() {
+        
     }
     
     func setTextView() {
@@ -41,4 +49,5 @@ class AddTaskController: UIViewController {
 
 extension Notification.Name {
     static let didSave = Notification.Name("SaveInfo")
+    static let didChange = Notification.Name("ChangeInfo")
 }

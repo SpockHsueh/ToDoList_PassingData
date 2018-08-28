@@ -11,7 +11,10 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var todoListTableView: UITableView!
+    
     var todoItem = [String]()
+    var selectIndex: Int!
+
     
     struct NotificationInfo {
         static let message = ""
@@ -30,16 +33,29 @@ class ViewController: UIViewController {
     }
     
     func addNotification() {
-        let name = Notification.Name("SaveInfo")
-        NotificationCenter.default.addObserver(self, selector: #selector(addSaveInfo(noti:)), name: name, object: nil)
+        let saveName = Notification.Name("SaveInfo")
+        let changeName = Notification.Name("ChangeInfo")
+        NotificationCenter.default.addObserver(self, selector: #selector(addSaveInfo(noti:)), name: saveName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addChangeInfo(noti:)), name: changeName, object: nil)
+
     }
     
     @objc func addSaveInfo(noti: Notification) {
         if let saveNotification = noti.userInfo, let saveInfo = saveNotification[NotificationInfo.message]{
             todoItem.append(saveInfo as! String)
+            print(todoItem)
             todoListTableView.reloadData()
         }
     }
+    
+    @objc func addChangeInfo(noti: Notification) {
+        if let saveNotification = noti.userInfo, let changeInfo = saveNotification[NotificationInfo.message]{
+            todoItem[selectIndex] = changeInfo as! String
+            todoListTableView.reloadData()
+        }
+    }
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -68,7 +84,8 @@ extension ViewController: UITableViewDataSource {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath) as? TodoItemCell {
             cell.ItemLabel.text = todoItem[indexPath.row]
-            cell.editButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+            cell.editButton.tag = indexPath.row
+            cell.editButton.addTarget(self, action: #selector(buttonPressed(button:)), for: .touchUpInside)
             return cell
         }
         return UITableViewCell()
@@ -76,8 +93,21 @@ extension ViewController: UITableViewDataSource {
     
     @objc func buttonPressed (button: UIButton) {
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let addTaskVC = storyboard.instantiateViewController(withIdentifier: "detailPage")
-        self.navigationController?.pushViewController(addTaskVC, animated: true)
+        if let addTaskVC = storyboard.instantiateViewController(withIdentifier: "detailPage") as? AddTaskController {
+            selectIndex = button.tag
+            addTaskVC.item = todoItem[button.tag]
+            self.navigationController?.pushViewController(addTaskVC, animated: true)
+        }
+    
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        todoItem.remove(at: indexPath.row)
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .delete
     }
     
 }
