@@ -38,7 +38,6 @@ class ViewController: UIViewController {
         if let saveNotification = noti.userInfo, let saveInfo = saveNotification[NotificationInfo.message]{
             todoItem.append(saveInfo as! String)
             todoListTableView.reloadData()
-
         }
     }
     

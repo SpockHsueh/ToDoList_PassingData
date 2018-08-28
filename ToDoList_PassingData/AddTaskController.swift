@@ -37,7 +37,6 @@ class AddTaskController: UIViewController {
         textView.layer.borderColor = UIColor.black.cgColor
     }
     
-
 }
 
 extension Notification.Name {
