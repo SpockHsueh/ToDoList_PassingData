@@ -62,7 +62,6 @@ class ViewController: UIViewController {
         guard let detailVC = segue.destination as? AddTaskController else {
             return
         }
-        
         if segue.identifier == "newItem" {
             detailVC.navigationName = "Add"
         }
