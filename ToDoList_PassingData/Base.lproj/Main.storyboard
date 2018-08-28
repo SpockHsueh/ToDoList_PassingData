@@ -55,13 +55,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Edit in here" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xVa-JC-9T9">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xVa-JC-9T9">
                                 <rect key="frame" x="67" y="104" width="185" height="133"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="133" id="IdY-Lv-Wph"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G1l-Lf-uaE">
@@ -71,6 +71,9 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                 <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveTextInfo:" destination="aGZ-lg-PZI" eventType="touchUpInside" id="bjg-w6-p6b"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -84,6 +87,9 @@
                         <viewLayoutGuide key="safeArea" id="Dqw-E7-JAA"/>
                     </view>
                     <navigationItem key="navigationItem" title="Edit" id="lsd-oC-gq1"/>
+                    <connections>
+                        <outlet property="textView" destination="xVa-JC-9T9" id="vUG-K4-RjW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cfo-zs-UXI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

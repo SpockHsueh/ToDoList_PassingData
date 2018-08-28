@@ -11,6 +11,11 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var todoListTableView: UITableView!
+    var todoItem = [String]()
+    
+    struct NotificationInfo {
+        static let message = ""
+    }
     
 
     override func viewDidLoad() {
@@ -20,6 +25,21 @@ class ViewController: UIViewController {
         todoListTableView.dataSource = self
         
         todoListTableView.register(UINib(nibName: "TodoItemCell", bundle: nil), forCellReuseIdentifier: "TodoItemCell")
+        
+        addNotification()
+    }
+    
+    func addNotification() {
+        let name = Notification.Name("SaveInfo")
+        NotificationCenter.default.addObserver(self, selector: #selector(addSaveInfo(noti:)), name: name, object: nil)
+    }
+    
+    @objc func addSaveInfo(noti: Notification) {
+        if let saveNotification = noti.userInfo, let saveInfo = saveNotification[NotificationInfo.message]{
+            todoItem.append(saveInfo as! String)
+            todoListTableView.reloadData()
+
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -42,13 +62,13 @@ extension ViewController: UITableViewDelegate {
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return todoItem.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath) as? TodoItemCell {
-            cell.ItemLabel.text = "測試"
+            cell.ItemLabel.text = todoItem[indexPath.row]
             cell.editButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
             return cell
         }
