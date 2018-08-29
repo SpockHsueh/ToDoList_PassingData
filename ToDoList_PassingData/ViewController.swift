@@ -30,17 +30,30 @@ class ViewController: UIViewController {
         datamodel?.delegate = self
         
         todoListTableView.register(UINib(nibName: "TodoItemCell", bundle: nil), forCellReuseIdentifier: "TodoItemCell")
+        datamodel?.loadViewIfNeeded()
+        datamodel?.addObserver(self, forKeyPath: "textView.text", options: [.old], context: nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        print(change!)
+        if change![NSKeyValueChangeKey.oldKey] as! String != ""{
+                let data = change![NSKeyValueChangeKey.oldKey]
+            if selectIndex == nil {
+                todoItem.append(data as! String)
+            } else {
+                todoItem[selectIndex] = data as! String
+                selectIndex = nil
+            }
+                self.todoListTableView.reloadData()
+        }
     }
     
     @IBAction func add(_ sender: Any) {
 
         datamodel!.item = nil
         datamodel?.navigationName = "Add"
-        datamodel!.completionHandler = { (data) in
-            print(data)
-            self.todoItem.append(data)
-            self.todoListTableView.reloadData()
-        }
+
         self.show(datamodel!, sender: nil)
     }
 }
@@ -72,10 +85,7 @@ extension ViewController: UITableViewDataSource {
             selectIndex = button.tag
             datamodel!.item = todoItem[button.tag]
             datamodel?.navigationName = "Edit"
-            datamodel?.completionHandler = { (data) in
-            self.todoItem[self.selectIndex] = data
-            self.todoListTableView.reloadData()
-        }
+ 
             self.show(datamodel!, sender: nil)
     }
     

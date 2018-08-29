@@ -10,17 +10,14 @@ import UIKit
 
 class AddTaskController: UIViewController {
     
-    @IBOutlet weak var textView: UITextView!
+    @objc @IBOutlet weak dynamic var textView: UITextView!
     var navigationName: String!
     var item: String?
     var text: String?
     
     weak var delegate: ViewController?
     var completionHandler: ((_ data: String) -> Void)?
-    
-    struct NotificationInfo {
-        static let message = ""
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,16 +33,7 @@ class AddTaskController: UIViewController {
     }
     
     @IBAction func saveTextInfo(_ sender: Any) {
-        if item == nil {
-            if let text = textView.text {
-                completionHandler!(text)
-            }
-            
-        } else {
-            if let text = textView.text {
-                completionHandler!(text)
-            }
-        }
+
         self.textView.text = ""
         navigationController?.popViewController(animated: true)
     }
