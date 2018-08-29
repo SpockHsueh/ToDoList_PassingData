@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol DataModelDelegate: AnyObject {
-    func didSaveData(data: String?)
-    func didChangeData(data: String?)
-}
 
 class AddTaskController: UIViewController {
     
@@ -20,7 +16,8 @@ class AddTaskController: UIViewController {
     var item: String?
     var text: String?
     
-    weak var delegate: DataModelDelegate?
+    weak var delegate: ViewController?
+    var completionHandler: ((_ data: String) -> Void)?
     
     struct NotificationInfo {
         static let message = ""
@@ -30,34 +27,28 @@ class AddTaskController: UIViewController {
         super.viewDidLoad()
         self.title = navigationName
         self.textView.text = item
+        
         setTextView()
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.textView.text = item
     }
 
     
     @IBAction func saveTextInfo(_ sender: Any) {
         if item == nil {
-            saveData()
+            if let text = textView.text {
+                completionHandler!(text)
+            }
+            
         } else {
-            changeData()
+            
         }
         self.textView.text = ""
         navigationController?.popViewController(animated: true)
-    }
-    
-    func saveData() {
-        text = textView.text
-        delegate?.didSaveData(data: text)
-    }
-    
-    func changeData() {
-        text = textView.text
-        delegate?.didChangeData(data: text)
-        
     }
     
     func setTextView() {
@@ -66,7 +57,3 @@ class AddTaskController: UIViewController {
     }
 }
 
-extension Notification.Name {
-    static let didSave = Notification.Name("SaveInfo")
-    static let didChange = Notification.Name("ChangeInfo")
-}

@@ -8,14 +8,13 @@
 
 import UIKit
 
-
 class ViewController: UIViewController {
     
     @IBOutlet weak var todoListTableView: UITableView!
     
-    
     var todoItem = [String]()
     var selectIndex: Int!
+    private let addTaskVC = AddTaskController()
     
     // This is closure
     var datamodel: AddTaskController? = {
@@ -35,23 +34,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func add(_ sender: Any) {
-        guard let datamodel = datamodel else {
-            return
+
+        datamodel!.item = nil
+        datamodel!.completionHandler = { (data) in
+            print(data)
+            self.todoItem.append(data)
+            self.todoListTableView.reloadData()
         }
-        datamodel.item = nil
-        self.show(datamodel, sender: nil)
+        self.show(datamodel!, sender: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard let detailVC = segue.destination as? AddTaskController else {
-            return
-        }
-        if segue.identifier == "newItem" {
-            detailVC.navigationName = "Add"
-            detailVC.delegate = self
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//
+//        guard let detailVC = segue.destination as? AddTaskController else {
+//            return
+//        }
+//        if segue.identifier == "newItem" {
+//            detailVC.navigationName = "Add"
+//            detailVC.delegate = self
+//        }
+//    }
+    
 }
 
 extension ViewController: UITableViewDelegate {
@@ -79,10 +82,13 @@ extension ViewController: UITableViewDataSource {
     @objc func buttonPressed (button: UIButton) {
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             selectIndex = button.tag
-            if let datamodel = datamodel {
-                datamodel.item = todoItem[button.tag]
-                self.show(datamodel, sender: nil)
-            }
+            datamodel!.item = todoItem[button.tag]
+        datamodel?.completionHandler = { (data) in
+            print(data)
+            self.todoItem[self.selectIndex] = data
+            self.todoListTableView.reloadData()
+        }
+            self.show(datamodel!, sender: nil)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -92,23 +98,6 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return .delete
-    }
-}
-
-extension ViewController: DataModelDelegate {
-    
-    func didChangeData(data: String?) {
-        if let data = data {
-            todoItem[selectIndex] = data
-            todoListTableView.reloadData()
-        }
-    }
-    
-    func didSaveData(data: String?) {
-        if let data = data {
-            todoItem.append(data)
-            todoListTableView.reloadData()
-        }
     }
 }
 
