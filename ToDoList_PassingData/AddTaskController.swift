@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class AddTaskController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
@@ -27,16 +26,14 @@ class AddTaskController: UIViewController {
         super.viewDidLoad()
         self.title = navigationName
         self.textView.text = item
-        
         setTextView()
     }
-    
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.title = navigationName
         self.textView.text = item
     }
-
     
     @IBAction func saveTextInfo(_ sender: Any) {
         if item == nil {
@@ -45,7 +42,9 @@ class AddTaskController: UIViewController {
             }
             
         } else {
-            
+            if let text = textView.text {
+                completionHandler!(text)
+            }
         }
         self.textView.text = ""
         navigationController?.popViewController(animated: true)
@@ -56,4 +55,3 @@ class AddTaskController: UIViewController {
         textView.layer.borderColor = UIColor.black.cgColor
     }
 }
-

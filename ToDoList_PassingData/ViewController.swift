@@ -14,7 +14,6 @@ class ViewController: UIViewController {
     
     var todoItem = [String]()
     var selectIndex: Int!
-    private let addTaskVC = AddTaskController()
     
     // This is closure
     var datamodel: AddTaskController? = {
@@ -36,6 +35,7 @@ class ViewController: UIViewController {
     @IBAction func add(_ sender: Any) {
 
         datamodel!.item = nil
+        datamodel?.navigationName = "Add"
         datamodel!.completionHandler = { (data) in
             print(data)
             self.todoItem.append(data)
@@ -43,18 +43,6 @@ class ViewController: UIViewController {
         }
         self.show(datamodel!, sender: nil)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//
-//        guard let detailVC = segue.destination as? AddTaskController else {
-//            return
-//        }
-//        if segue.identifier == "newItem" {
-//            detailVC.navigationName = "Add"
-//            detailVC.delegate = self
-//        }
-//    }
-    
 }
 
 extension ViewController: UITableViewDelegate {
@@ -83,8 +71,8 @@ extension ViewController: UITableViewDataSource {
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             selectIndex = button.tag
             datamodel!.item = todoItem[button.tag]
-        datamodel?.completionHandler = { (data) in
-            print(data)
+            datamodel?.navigationName = "Edit"
+            datamodel?.completionHandler = { (data) in
             self.todoItem[self.selectIndex] = data
             self.todoListTableView.reloadData()
         }
