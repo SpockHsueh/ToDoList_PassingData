@@ -13,20 +13,33 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var todoListTableView: UITableView!
     
+    
     var todoItem = [String]()
     var selectIndex: Int!
-    var datamodel = AddTaskController()
-
+    
+    // This is closure
+    var datamodel: AddTaskController? = {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "detailPage") as? AddTaskController
+        return vc
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         todoListTableView.delegate = self
         todoListTableView.dataSource = self
- 
+        datamodel?.delegate = self
         
         todoListTableView.register(UINib(nibName: "TodoItemCell", bundle: nil), forCellReuseIdentifier: "TodoItemCell")
-        
+    }
+    
+    @IBAction func add(_ sender: Any) {
+        guard let datamodel = datamodel else {
+            return
+        }
+        datamodel.item = nil
+        self.show(datamodel, sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -65,13 +78,11 @@ extension ViewController: UITableViewDataSource {
     
     @objc func buttonPressed (button: UIButton) {
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        if let addTaskVC = storyboard.instantiateViewController(withIdentifier: "detailPage") as? AddTaskController {
             selectIndex = button.tag
-            addTaskVC.item = todoItem[button.tag]
-            self.show(addTaskVC, sender: nil)
-//            self.navigationController?.pushViewController(addTaskVC, animated: true)
-        }
-    
+            if let datamodel = datamodel {
+                datamodel.item = todoItem[button.tag]
+                self.show(datamodel, sender: nil)
+            }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -84,8 +95,14 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-
 extension ViewController: DataModelDelegate {
+    
+    func didChangeData(data: String?) {
+        if let data = data {
+            todoItem[selectIndex] = data
+            todoListTableView.reloadData()
+        }
+    }
     
     func didSaveData(data: String?) {
         if let data = data {

@@ -10,6 +10,7 @@ import UIKit
 
 protocol DataModelDelegate: AnyObject {
     func didSaveData(data: String?)
+    func didChangeData(data: String?)
 }
 
 class AddTaskController: UIViewController {
@@ -30,37 +31,39 @@ class AddTaskController: UIViewController {
         self.title = navigationName
         self.textView.text = item
         setTextView()
-        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    
+    override func viewWillAppear(_ animated: Bool) {
         self.textView.text = item
-
     }
-    
 
+    
     @IBAction func saveTextInfo(_ sender: Any) {
         if item == nil {
-            text = textView.text
-            requestData()
-
+            saveData()
         } else {
-             NotificationCenter.default.post(name: .didChange, object: nil, userInfo: [NotificationInfo.message: textView.text])
+            changeData()
         }
+        self.textView.text = ""
         navigationController?.popViewController(animated: true)
     }
     
-    func requestData() {
+    func saveData() {
+        text = textView.text
         delegate?.didSaveData(data: text)
     }
     
+    func changeData() {
+        text = textView.text
+        delegate?.didChangeData(data: text)
+        
+    }
     
     func setTextView() {
         textView.layer.borderWidth = 0.5
         textView.layer.borderColor = UIColor.black.cgColor
     }
-    
 }
 
 extension Notification.Name {
