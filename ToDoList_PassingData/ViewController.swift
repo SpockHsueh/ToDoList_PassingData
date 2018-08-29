@@ -15,7 +15,12 @@ class ViewController: UIViewController {
     
     var todoItem = [String]()
     var selectIndex: Int!
-    var datamodel = AddTaskController()
+    
+    var dataModel: AddTaskController? = {
+        let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "detailPage") as? AddTaskController
+        return vc
+    }()
 
     
     override func viewDidLoad() {
@@ -23,26 +28,20 @@ class ViewController: UIViewController {
         
         todoListTableView.delegate = self
         todoListTableView.dataSource = self
- 
+        dataModel?.delegate = self
         
         todoListTableView.register(UINib(nibName: "TodoItemCell", bundle: nil), forCellReuseIdentifier: "TodoItemCell")
-        
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard let detailVC = segue.destination as? AddTaskController else {
-            return
-        }
-        if segue.identifier == "newItem" {
-            detailVC.navigationName = "Add"
-            detailVC.delegate = self
-        }
+    @IBAction func add(_ sender: Any) {
+        dataModel?.item = nil
+        dataModel?.navigationName = "Add"
+
+        self.show(dataModel!, sender: nil)
     }
 }
 
 extension ViewController: UITableViewDelegate {
-    
 }
 
 
@@ -65,17 +64,14 @@ extension ViewController: UITableViewDataSource {
     
     @objc func buttonPressed (button: UIButton) {
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        if let addTaskVC = storyboard.instantiateViewController(withIdentifier: "detailPage") as? AddTaskController {
-            selectIndex = button.tag
-            addTaskVC.item = todoItem[button.tag]
-            self.show(addTaskVC, sender: nil)
-        }
-    
+        selectIndex = button.tag
+        dataModel!.item = todoItem[button.tag]
+        self.show(dataModel!, sender: nil)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         todoItem.remove(at: indexPath.row)
-        tableView.reloadData()
+        self.todoListTableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -86,6 +82,13 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: DataModelDelegate {
     
+    func didChangeData(data: String?) {
+        if let data = data {
+            todoItem[selectIndex] = data
+            todoListTableView.reloadData()
+        }
+    }
+    
     func didSaveData(data: String?) {
         if let data = data {
             todoItem.append(data)
@@ -93,4 +96,3 @@ extension ViewController: DataModelDelegate {
         }
     }
 }
-
