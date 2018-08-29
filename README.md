@@ -1,12 +1,12 @@
 # ToDoList: Four ways to pass data from Model to Controller
 
-###* Closure
+### * Closure
 
-###* Delegate
+### * Delegate
 
-###* KVO
+### * KVO
 
-###* Notification
+### * Notification
 
 ***
 
