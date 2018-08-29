@@ -26,7 +26,6 @@ class AddTaskController: UIViewController {
         setTextView()
     }
     
-
     @IBAction func saveTextInfo(_ sender: Any) {
         if item == nil {
             NotificationCenter.default.post(name: .didSave, object: nil, userInfo: [NotificationInfo.message: textView.text])
@@ -44,7 +43,6 @@ class AddTaskController: UIViewController {
         textView.layer.borderWidth = 0.5
         textView.layer.borderColor = UIColor.black.cgColor
     }
-    
 }
 
 extension Notification.Name {

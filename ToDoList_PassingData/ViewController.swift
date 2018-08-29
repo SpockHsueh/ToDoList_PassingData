@@ -14,13 +14,11 @@ class ViewController: UIViewController {
     
     var todoItem = [String]()
     var selectIndex: Int!
-
     
     struct NotificationInfo {
         static let message = ""
     }
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
