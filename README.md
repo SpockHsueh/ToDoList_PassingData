@@ -10,13 +10,13 @@
 
 ***
 
-#Part1. Closure
-###To use closure to communicate with ViewController is to cerate a function as a completionHandler property:
+# Part1. Closure
+### To use closure to communicate with ViewController is to cerate a function as a completionHandler property:
 ```
 var completionHandler: ((_ data: String) -> Void)?
 
 ```
-###Now, inside the save method, we can using this property
+### Now, inside the save method, we can using this property
 ```
  @IBAction func saveTextInfo(_ sender: Any) {
         if item == nil {
@@ -26,12 +26,12 @@ var completionHandler: ((_ data: String) -> Void)?
         }
     }
 ```
-> ###You can also create a multiple properties or using @excaping (ex. getHTTP), All closure are optional to use, so if you don't need to do anything, you simply do not use this property. This are the benfits of this method.
+> ### You can also create a multiple properties or using @excaping (ex. getHTTP), All closure are optional to use, so if you don't need to do anything, you simply do not use this property. This are the benfits of this method.
 
 
 ***
 
-#Part2. Delegate
+# Part2. Delegate
 ### Delegation is the most common way to communicate between DataModel and ViewController.
 ```
 protocol DataModelDelegate: AnyObject {
@@ -68,7 +68,7 @@ extension ViewController: DataModelDelegate {
 ```
 
 ***
-#Part3. KVO
+# Part3. KVO
 ### To use KVO is more like the Notification, we can add observe in everywhere, for example we can add observer in UITextView.text to detact the value changed or not:
 
 ```
@@ -89,7 +89,7 @@ String?, of object: Any?, change:
 
 
 ***
-#Part4. Notification
+# Part4. Notification
 ### Add a variable to store our data in Model
 
 ```
