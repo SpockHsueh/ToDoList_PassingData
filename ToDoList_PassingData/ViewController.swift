@@ -69,7 +69,6 @@ extension ViewController: UITableViewDataSource {
             selectIndex = button.tag
             addTaskVC.item = todoItem[button.tag]
             self.show(addTaskVC, sender: nil)
-//            self.navigationController?.pushViewController(addTaskVC, animated: true)
         }
     
     }
