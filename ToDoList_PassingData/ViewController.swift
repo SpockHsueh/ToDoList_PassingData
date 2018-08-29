@@ -8,54 +8,26 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var todoListTableView: UITableView!
     
     var todoItem = [String]()
     var selectIndex: Int!
+    var datamodel = AddTaskController()
 
     
-    struct NotificationInfo {
-        static let message = ""
-    }
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         todoListTableView.delegate = self
         todoListTableView.dataSource = self
+ 
         
         todoListTableView.register(UINib(nibName: "TodoItemCell", bundle: nil), forCellReuseIdentifier: "TodoItemCell")
         
-        addNotification()
     }
-    
-    func addNotification() {
-        let saveName = Notification.Name("SaveInfo")
-        let changeName = Notification.Name("ChangeInfo")
-        NotificationCenter.default.addObserver(self, selector: #selector(addSaveInfo(noti:)), name: saveName, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(addChangeInfo(noti:)), name: changeName, object: nil)
-
-    }
-    
-    @objc func addSaveInfo(noti: Notification) {
-        if let saveNotification = noti.userInfo, let saveInfo = saveNotification[NotificationInfo.message]{
-            todoItem.append(saveInfo as! String)
-            print(todoItem)
-            todoListTableView.reloadData()
-        }
-    }
-    
-    @objc func addChangeInfo(noti: Notification) {
-        if let saveNotification = noti.userInfo, let changeInfo = saveNotification[NotificationInfo.message]{
-            todoItem[selectIndex] = changeInfo as! String
-            todoListTableView.reloadData()
-        }
-    }
-    
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -64,6 +36,7 @@ class ViewController: UIViewController {
         }
         if segue.identifier == "newItem" {
             detailVC.navigationName = "Add"
+            detailVC.delegate = self
         }
     }
 }
@@ -95,7 +68,8 @@ extension ViewController: UITableViewDataSource {
         if let addTaskVC = storyboard.instantiateViewController(withIdentifier: "detailPage") as? AddTaskController {
             selectIndex = button.tag
             addTaskVC.item = todoItem[button.tag]
-            self.navigationController?.pushViewController(addTaskVC, animated: true)
+            self.show(addTaskVC, sender: nil)
+//            self.navigationController?.pushViewController(addTaskVC, animated: true)
         }
     
     }
@@ -108,6 +82,16 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return .delete
     }
+}
+
+
+extension ViewController: DataModelDelegate {
     
+    func didSaveData(data: String?) {
+        if let data = data {
+            todoItem.append(data)
+            todoListTableView.reloadData()
+        }
+    }
 }
 

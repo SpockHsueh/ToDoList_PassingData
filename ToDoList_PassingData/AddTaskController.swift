@@ -8,12 +8,18 @@
 
 import UIKit
 
+protocol DataModelDelegate: AnyObject {
+    func didSaveData(data: String?)
+}
+
 class AddTaskController: UIViewController {
     
+    @IBOutlet weak var textView: UITextView!
     var navigationName: String!
     var item: String?
+    var text: String?
     
-    @IBOutlet weak var textView: UITextView!
+    weak var delegate: DataModelDelegate?
     
     struct NotificationInfo {
         static let message = ""
@@ -24,21 +30,31 @@ class AddTaskController: UIViewController {
         self.title = navigationName
         self.textView.text = item
         setTextView()
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.textView.text = item
+
     }
     
 
     @IBAction func saveTextInfo(_ sender: Any) {
         if item == nil {
-            NotificationCenter.default.post(name: .didSave, object: nil, userInfo: [NotificationInfo.message: textView.text])
+            text = textView.text
+            requestData()
+
         } else {
              NotificationCenter.default.post(name: .didChange, object: nil, userInfo: [NotificationInfo.message: textView.text])
         }
         navigationController?.popViewController(animated: true)
     }
     
-    func editInfo() {
-        
+    func requestData() {
+        delegate?.didSaveData(data: text)
     }
+    
     
     func setTextView() {
         textView.layer.borderWidth = 0.5
