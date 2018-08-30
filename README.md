@@ -55,7 +55,7 @@ func saveData() {
 func ...
 		
 ```
-### Create an instance of DataModelDelegate in ViewController, assign its delegate to self and using extension to use data.
+### Create an instance of DataModelDelegate in ViewController and conform the protocol you create, assign its delegate to self and using the protocol function to use data.
 
 ```
 extension ViewController: DataModelDelegate {
