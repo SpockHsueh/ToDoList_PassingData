@@ -38,7 +38,8 @@ class ViewController: UIViewController {
         datamodel?.navigationName = "Add"
         datamodel!.completionHandler = { (data) in
             print(data)
-            self.todoItem.append(data)
+            self.todoItem.a
+            ppend(data)
             self.todoListTableView.reloadData()
         }
         self.show(datamodel!, sender: nil)
