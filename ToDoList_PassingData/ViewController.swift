@@ -8,6 +8,9 @@
 
 import UIKit
 
+protocol getTableViewCell: class {
+    func tableViewCellDidTap(_ sender: TodoItemCell)
+}
 
 class ViewController: UIViewController {
     
@@ -54,8 +57,9 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath) as? TodoItemCell {
+            cell.cellDelegate = self
             cell.ItemLabel.text = todoItem[indexPath.row]
-            cell.editButton.tag = indexPath.row
+//            cell.editButton.tag = indexPath.row
             cell.editButton.addTarget(self, action: #selector(buttonPressed(button:)), for: .touchUpInside)
             return cell
         }
@@ -64,8 +68,8 @@ extension ViewController: UITableViewDataSource {
     
     @objc func buttonPressed (button: UIButton) {
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        selectIndex = button.tag
-        dataModel!.item = todoItem[button.tag]
+//        selectIndex = button.tag
+        dataModel!.item = todoItem[selectIndex]
         self.show(dataModel!, sender: nil)
     }
     
@@ -78,7 +82,6 @@ extension ViewController: UITableViewDataSource {
         return .delete
     }
 }
-
 
 extension ViewController: DataModelDelegate {
     
@@ -96,3 +99,20 @@ extension ViewController: DataModelDelegate {
         }
     }
 }
+
+extension ViewController: getTableViewCell {
+    
+    func tableViewCellDidTap(_ sender: TodoItemCell) {
+        
+        guard let selectIndexPath = todoListTableView.indexPath(for: sender) else {
+            return
+        }
+        selectIndex = selectIndexPath.row
+        print(selectIndexPath.row)
+    }
+}
+
+
+
+
+

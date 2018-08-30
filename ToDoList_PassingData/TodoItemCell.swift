@@ -13,6 +13,12 @@ class TodoItemCell: UITableViewCell {
     @IBOutlet weak var ItemLabel: UILabel!
     @IBOutlet weak var editButton: UIButton!
     
+    weak var cellDelegate: getTableViewCell?
+    
+    @IBAction func editPressed(_ sender: Any) {
+        cellDelegate?.tableViewCellDidTap(self)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
