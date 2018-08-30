@@ -36,10 +36,15 @@ class ViewController: UIViewController {
 
         datamodel!.item = nil
         datamodel?.navigationName = "Add"
+        
+        // 定義closure
+        // = 代表宣告一個closure
+        // in 前面代表輸入
+        // Closure 捕捉？
         datamodel!.completionHandler = { (data) in
             print(data)
-            self.todoItem.a
-            ppend(data)
+            
+            self.todoItem.append(data)
             self.todoListTableView.reloadData()
         }
         self.show(datamodel!, sender: nil)

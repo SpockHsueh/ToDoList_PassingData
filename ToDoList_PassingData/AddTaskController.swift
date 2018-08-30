@@ -16,6 +16,7 @@ class AddTaskController: UIViewController {
     var text: String?
     
     weak var delegate: ViewController?
+    // keep closure to property from VC1
     var completionHandler: ((_ data: String) -> Void)?
     
     struct NotificationInfo {
