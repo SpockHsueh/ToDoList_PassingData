@@ -34,7 +34,7 @@ var completionHandler: ((_ data: String) -> Void)?
 ***
 
 # Part2. Delegate
-### Delegation is the most common way to communicate between DataModel and ViewController.
+### Delegation is the most common way to communicate between DataModel and ViewController. can create a lot of function depand what we want to do.
 ```
 protocol DataModelDelegate: AnyObject {
     func didSaveData(data: String?)
