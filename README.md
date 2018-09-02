@@ -35,7 +35,7 @@ var completionHandler: ((_ data: String) -> Void)?
 
 # Part2. Delegate (To Reduce Coupling)
 ### Delegation is the most common way to communicate between DataModel and ViewController. can create a lot of function depand what we want to do.
-```
+```javascript
 protocol DataModelDelegate: AnyObject {
     func didSaveData(data: String?)
     func didChangeData(data: String?)
